@@ -6,7 +6,7 @@ require('dotenv').config()
 
 module.exports = {
   DBConnect: function (dbName) {
-    var dbURL // = process.env.JAWSDB_URL;
+    var dbURL = process.env.JAWSDB_URL;
 
     if (!dbURL)
       dbURL = "mysql://root:harry4657@localhost:3306/" + dbName;

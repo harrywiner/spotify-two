@@ -5,13 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "command": "npm run dev",
+      "name": "Debug",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Debug moment",
       "program": "${workspaceFolder}/mmt.js",
       "cwd": "${workspaceFolder}"
     },
-
     {
       "type": "node",
       "request": "launch",

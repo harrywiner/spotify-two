@@ -68,7 +68,10 @@ async function insertHistory(filename) {
     recentPlays[i].trackName = formatString(recentPlays[i].trackName);
     recentPlays[i].artistName = formatString(recentPlays[i].artistName);
     await addToDatabase(recentPlays[i]);
-    //await tools.wait(10);
+    await tools.wait(10);
+    if (i % 1000 == 0) {
+      console.log(`Done with ${i} entries`)
+    }
   }
 }
 // todo make i value in  for loop determine amount
@@ -83,10 +86,18 @@ async function insertHistory(filename) {
   */
 
 async function main() {
-  await insertHistory("./json/StreamingHistory0.json");
   await insertHistory("./json/StreamingHistory1.json");
+  console.log("Done history 1")
   await insertHistory("./json/StreamingHistory2.json");
+  console.log("Done history 2")
   await insertHistory("./json/StreamingHistory3.json");
+  console.log("Done history 3")
+  await insertHistory("./json/StreamingHistory4.json");
+  console.log("Done history 4")
+  await insertHistory("./json/StreamingHistory5.json");
+  console.log("Done history 5")
+  await insertHistory("./json/StreamingHistory6.json");
+  console.log("Done history 6")
   con.end();
 }
 

@@ -1,17 +1,43 @@
+:root {
+  --dark: #121212;
+  --text-light-grey: #b2b2b2;
+  --bg-light-grey: #434343;
+  --button-green: #1bb855;
+}
+
 h1.display-4 {
   color: #ffffff;
 }
 
 div.jumbotron {
-  background-color: #1db954;
+  background-color: var(--bg-light-grey);
   border-radius: 20px;
+  width: 100%;
+  text-align: center;
+  border-radius: 0px;
+  display:flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+body, html {
+  height: 100%;
+  margin: 0;
+  background-color: var(--dark);
+}
+
+img.profile {
+  width: 100px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 button.btn-light-green {
-  background-color: #9fdf9f;
+  background-color: var(--button-green);
 }
 
-thead.thead-green {
+/* thead.thead-green {
   background-color: #1db954;
   border-color: #1db954;
 }
@@ -29,4 +55,20 @@ thead.thead-green {
 }
 .table-striped > tbody > tr.selected > td {
   background-color: #9fdf9f;
+} */
+
+th, td {
+  color: var(--text-light-grey)
+}
+
+.trackName {
+  color: #fff
+}
+
+#total-plays-count {
+  font-weight: 1000
+}
+
+table {
+  display: none;
 }

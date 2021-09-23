@@ -12,11 +12,14 @@ const port = process.env.PORT || 8000;
 var app = express();
 
 app.use(express.static(__dirname + "/public"));
+app.use("/src", express.static(__dirname + "/src"));
 
 console.log("Listening on " + port);
 app.listen(port);
 
-
+var connection = tools.DBConnect("spotify").then(connection => {
+  return connection
+});
 
 app.get("/count-total-plays", function (req, res) {
   var dbPromise = tools.DBConnect("spotify");
@@ -29,12 +32,10 @@ app.get("/count-total-plays", function (req, res) {
         playCount: count,
       });
 
-      connection.end();
-
       return;
     });
   });
-});
+})
 
 app.get("/most-played", function (req, res) {
   var dbPromise = tools.DBConnect("spotify");
@@ -53,8 +54,6 @@ app.get("/most-played", function (req, res) {
       res.send({
         mostPlayed: plays,
       });
-
-      connection.end();
 
       return;
     });
@@ -75,14 +74,18 @@ app.get("/play-time", function (req, res) {
     );
 
     playPromise.then((plays) => {
-      console.log(JSON.stringify(plays));
       res.send({
         playTime: plays,
       });
-
-      connection.end();
-
       return;
     });
   });
 });
+
+app.get('/total-play-time', async (req, res) => {
+  var con = await tools.DBConnect("spotify");
+
+  var msPlayed = await tools.TotalPlayTime(con)
+
+  res.send({ msPlayed })
+})

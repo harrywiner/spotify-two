@@ -1,4 +1,4 @@
-var tools = require("./tools");
+var tools = require("./src/tools");
 var yargs = require("yargs");
 var express = require("express");
 var request = require("request");
@@ -11,7 +11,7 @@ const port = process.env.PORT || 8000;
 
 var app = express();
 
-app.use(express.static(__dirname + "/"));
+app.use(express.static(__dirname + "/public"));
 
 console.log("Listening on " + port);
 app.listen(port);

@@ -9,30 +9,10 @@ function ReadHistory(filename) {
   return recentPlays;
 }
 
-var dbURL = process.env.JAWSDB_URL;
 
-if (dbURL == null || dbURL == "")
-  dbURL = "mysql://root:harry4657@localhost:3306/" + "spotify";
 
-con = mysql.createConnection(dbURL);
 
-con.connect(function (err) {
-  if (err) throw err;
-});
-
-var setup = "DROP TABLE plays;";
-var setup2 =
-  "CREATE TABLE plays (playID INT AUTO_INCREMENT,trackName varchar (32),artistName varchar (32),endTime varchar (32),msPlayed INT,PRIMARY KEY (playID))";
-
-con.query(setup, function (err, result, fields) {
-  if (err) throw err;
-});
-
-con.query(setup2, function (err, result, fields) {
-  if (err) throw err;
-});
-
-async function addToDatabase(play) {
+async function addToDatabase(play, con) {
   var sql =
     "INSERT INTO plays (trackName, artistName, endTime, msPlayed) VALUES (?, ?, ?, ?);";
   var inputs = [play.trackName, play.artistName, play.endTime, play.msPlayed];
@@ -43,15 +23,6 @@ async function addToDatabase(play) {
     if (err) throw err;
   });
 }
-
-function selectAll() {
-  var sql = "SELECT * FROM plays;";
-
-  con.query(sql, function (err, result, fields) {
-    if (err) throw err;
-  });
-}
-
 // replaces all single quotes with sql escaped single quotes
 function formatString(str) {
   var formatStr = str.replace(/'/g, "''");
@@ -62,12 +33,12 @@ function formatString(str) {
   return formatStr;
 }
 
-async function insertHistory(filename) {
+async function insertHistory(filename, con) {
   var recentPlays = ReadHistory(filename);
   for (i = 0; i < recentPlays.length; i++) {
     recentPlays[i].trackName = formatString(recentPlays[i].trackName);
     recentPlays[i].artistName = formatString(recentPlays[i].artistName);
-    await addToDatabase(recentPlays[i]);
+    await addToDatabase(recentPlays[i], con);
     await tools.wait(10);
     if (i % 1000 == 0) {
       console.log(`Done with ${i} entries`)
@@ -86,18 +57,34 @@ async function insertHistory(filename) {
   */
 
 async function main() {
-  await insertHistory("./json/StreamingHistory1.json");
+  var con = await tools.DBConnect("spotify")
+  var setup = "DROP TABLE plays;";
+  var setup2 =
+    "CREATE TABLE plays (playID INT AUTO_INCREMENT,trackName varchar (32),artistName varchar (32),endTime varchar (32),msPlayed INT,PRIMARY KEY (playID))";
+
+  con.query(setup, function (err, result, fields) {
+    if (err) throw err;
+  });
+
+  con.query(setup2, function (err, result, fields) {
+    if (err) throw err;
+  });
+  await insertHistory("./json/StreamingHistory1.json", con);
   console.log("Done history 1")
-  await insertHistory("./json/StreamingHistory2.json");
+  await insertHistory("./json/StreamingHistory2.json", con);
   console.log("Done history 2")
-  await insertHistory("./json/StreamingHistory3.json");
+  await insertHistory("./json/StreamingHistory3.json", con);
   console.log("Done history 3")
-  await insertHistory("./json/StreamingHistory4.json");
+  await insertHistory("./json/StreamingHistory4.json", con);
   console.log("Done history 4")
-  await insertHistory("./json/StreamingHistory5.json");
+  await insertHistory("./json/StreamingHistory5.json", con);
   console.log("Done history 5")
-  await insertHistory("./json/StreamingHistory6.json");
+  await insertHistory("./json/StreamingHistory6.json", con);
   console.log("Done history 6")
+  await insertHistory("./json/StreamingHistory7.json", con);
+  console.log("Done history 7")
+  await insertHistory("./json/StreamingHistory8.json", con);
+  console.log("Done history 8")
   con.end();
 }
 

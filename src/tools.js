@@ -6,12 +6,24 @@ require('dotenv').config()
 
 module.exports = {
   DBConnect: function (dbName) {
-    var dbURL = process.env.JAWSDB_URL;
+    var dbURL = process.env.SPOTIFY_AWS;
 
     if (!dbURL)
       dbURL = "mysql://root:harry4657@localhost:3306/" + dbName;
 
-    connection = mysql.createConnection(dbURL);
+    // connection = mysql.createConnection({
+    //   host: "spotify-aws.cvy6fhmxbnjd.us-east-1.rds.amazonaws.com",
+    //   user: "admin",
+    //   password: "C8Y78VHjr?sbaMJA",
+    //   database: "spotify"
+    // });
+
+    connection = mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE
+    });
 
     return new Promise(function (resolve, reject) {
       connection.connect((error) => {
